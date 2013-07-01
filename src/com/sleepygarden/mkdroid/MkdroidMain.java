@@ -61,26 +61,27 @@ public class MkdroidMain {
 			}
 
 		}
-		UrlValidator urlValidator = new UrlValidator();
-		if (!urlValidator.isValid(domain)) {
-			System.out.println("Invalid domain name.");
-			return;
-		}
+		//UrlValidator urlValidator = new UrlValidator();
+		//if (!urlValidator.isValid(domain)) {
+		//	System.out.println("Invalid domain name.");
+		//	return;
+		//}
 
 		ProjectSetupConfiguration config = new ProjectSetupConfiguration();
 		config.projectName = "my-mkdroid-app";
 		config.destinationPath = dst.getAbsolutePath();
-
 		config.siteRoot = src.getAbsolutePath();
 
 		MCProjectSetup setup = new MCProjectSetup(config);
 
 		System.out.println("Decompressing projects...");
-		setup.inflateProjects();
+		setup.inflateProjects(true);
+		System.out.println(" done\nAdding webfiles...");
+		setup.addWebFiles();
 		System.out.println(" done\nPost-processing files...");
 		setup.postProcess();
 		System.out.println(" done\nCopying project into destination...");
-		setup.copy();
+		setup.copy(true);
 		System.out.println(" done\nCleaning...");
 		setup.clean();
 		System.out.println(" done\nAll done!");

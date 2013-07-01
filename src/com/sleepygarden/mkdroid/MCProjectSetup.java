@@ -49,7 +49,7 @@ public class MCProjectSetup {
 	 * 
 	 * @throws IOException
 	 */
-	public void inflateProjects() throws IOException {
+	public void inflateProjects(boolean quietly) throws IOException {
 		FileUtils.forceMkdir(tmpDst);
 		FileUtils.cleanDirectory(tmpDst);
 
@@ -61,8 +61,10 @@ public class MCProjectSetup {
 		while ((entry = zis.getNextEntry()) != null) {
 
 			if (!entry.getName().startsWith("__MACOSX")) {
-				System.out.println("copying " + entry.getName() + " into "
-						+ tmpDst.getName());
+				if (!quietly) {
+					System.out.println("copying " + entry.getName() + " into "
+							+ tmpDst.getName());
+				}
 
 				File file = new File(tmpDst, entry.getName());
 				if (entry.isDirectory()) {
@@ -76,6 +78,9 @@ public class MCProjectSetup {
 		}
 
 		zis.close();
+
+		// because zipping stuff on my mac is weird, move everything in
+		// blankdroid up, delete empty blankdroid
 		File root = new File(tmpDst, "blankdroid");
 		for (File f : root.listFiles()) {
 			if (f.isDirectory()) {
@@ -86,14 +91,18 @@ public class MCProjectSetup {
 
 			}
 		}
+		FileUtils.deleteQuietly(root);
 
 	}
 
-	/**
-	 * Launchers and packages are set up according to the user choices.
-	 * 
-	 * @throws IOException
-	 */
+	public void addWebFiles() throws IOException {
+		File src = new File(cfg.siteRoot);
+		File dst = new File(tmpDst, "assets/webfiles");
+		FileUtils.forceMkdir(dst);
+		FileUtils.copyDirectory(src, dst);
+
+	}
+
 	public void postProcess() throws IOException {
 		templateManager.processOver(new File(tmpDst, "/.classpath"));
 
@@ -102,22 +111,19 @@ public class MCProjectSetup {
 		File newMain = new File("src/" + cfg.packageName.replace('.', '/')
 				+ "/MainActivity.java");
 		FileUtils.deleteQuietly(newMain);
-		FileUtils.moveFile(main, newMain);
+		FileUtils.copyFile(main, newMain);
 		reviseManifest();
 		FileUtils.copyDirectory(tmpDst, dst);
 
 	}
 
-	public void addWebFiles() {
-		File src = new File(cfg.siteRoot);
-		File dst = new File(tmpDst, "webfiles");
-	}
-
-	public void copy() throws IOException {
-		printDirContents(tmpDst);
+	public void copy(boolean quietly) throws IOException {
+		if (!quietly){
+			printDirContents(tmpDst);
+		}
 		File dst = new File(cfg.destinationPath);
 		File src = new File(tmpDst, cfg.projectName);
-		src.renameTo(dst);
+		//src.renameTo(dst);
 		FileUtils.copyDirectoryToDirectory(src, dst);
 
 	}
