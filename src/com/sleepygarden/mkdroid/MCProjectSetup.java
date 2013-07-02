@@ -35,6 +35,12 @@ public class MCProjectSetup {
 		templateManager.define("ANDROID_TARGET_SDK",
 				cfg.androidTargetSdkVersion);
 		templateManager.define("ANDROID_USES_SDK");
+		
+		if (Integer.parseInt(cfg.androidTargetSdkVersion) >= 17){
+			templateManager.define("IF_V_17_UP", "");
+		}else {
+			templateManager.define("IF_V_17_UP", "//");
+		}
 	}
 
 	/**
@@ -166,13 +172,14 @@ public class MCProjectSetup {
 	private void reviseFiles() throws IOException {
 		File packageDir = new File(tmpDst, "src/"
 				+ cfg.packageName.replace('.', '/'));
-		templateManager.processOver(new File(tmpDst, "AndroidManifest.xml"));
+		templateManager.processOver(new File(tmpDst, "/AndroidManifest.xml"));
 		templateManager.processOver(new File(packageDir, "MainActivity.java"));
 		templateManager.processOver(new File(packageDir,
 				"MKDroidClient.java"));
 		templateManager.processOver(new File(packageDir,
 				"MKDroidJsInterface.java"));
 		templateManager.processOver(new File(tmpDst, "/.project"));
+		templateManager.processOver(new File(tmpDst, "/project.properties"));
 		templateManager.processOver(new File(tmpDst, "/.classpath"));
 
 	}

@@ -22,9 +22,8 @@ package com.sleepygarden.mkdroid;
 public class ProjectSetupConfiguration {
 	public String mainClassName = "MyMkDroid";
 	public String packageName = "com.me.mymkdroid";
-	public String androidMinSdkVersion = "5";
+	public String androidMinSdkVersion = "7";
 	public String androidTargetSdkVersion = "17";
-	public String androidMaxSdkVersion = "";
 	public String projectName = "my-mkdroid";
 	public String destinationPath = ".";
 	public String siteRoot = "";
