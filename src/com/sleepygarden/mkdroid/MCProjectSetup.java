@@ -22,6 +22,7 @@ public class MCProjectSetup {
 
 		templateManager.define("PROJECT_NAME", cfg.projectName);
 		templateManager.define("MAINCLASS_NAME", cfg.mainClassName);
+		templateManager.define("DOMAIN_NAME", cfg.domain);
 		templateManager.define("PACKAGE_NAME", cfg.packageName);
 		templateManager.define("PACKAGE_NAME_AS_PATH",
 				cfg.packageName.replace('.', '/'));
@@ -30,17 +31,10 @@ public class MCProjectSetup {
 		templateManager.define("PRJ_ANDROID_NAME", cfg.projectName);
 
 		// Android manifest definitions
-		if (!cfg.androidMinSdkVersion.equals(""))
-			templateManager.define("ANDROID_MIN_SDK", cfg.androidMinSdkVersion);
-		if (!cfg.androidTargetSdkVersion.equals(""))
-			templateManager.define("ANDROID_TARGET_SDK",
-					cfg.androidTargetSdkVersion);
-		if (!cfg.androidMaxSdkVersion.equals(""))
-			templateManager.define("ANDROID_MAX_SDK", cfg.androidMaxSdkVersion);
-		if (!cfg.androidMinSdkVersion.equals("")
-				|| !cfg.androidTargetSdkVersion.equals("")
-				|| !cfg.androidMaxSdkVersion.equals(""))
-			templateManager.define("ANDROID_USES_SDK");
+		templateManager.define("ANDROID_MIN_SDK", cfg.androidMinSdkVersion);
+		templateManager.define("ANDROID_TARGET_SDK",
+				cfg.androidTargetSdkVersion);
+		templateManager.define("ANDROID_USES_SDK");
 	}
 
 	/**
@@ -80,7 +74,7 @@ public class MCProjectSetup {
 		zis.close();
 
 		// because zipping stuff on my mac is weird, move everything in
-		// blankdroid up, delete empty blankdroid
+		// blankdroid up, delete empty blankdroid TODO wtf is that about
 		File root = new File(tmpDst, "blankdroid");
 		for (File f : root.listFiles()) {
 			if (f.isDirectory()) {
@@ -104,26 +98,39 @@ public class MCProjectSetup {
 	}
 
 	public void postProcess() throws IOException {
-		templateManager.processOver(new File(tmpDst, "/.classpath"));
+
+		File packageDir = new File(tmpDst, "src/"
+				+ cfg.packageName.replace('.', '/'));
+		FileUtils.forceMkdir(packageDir);
+
+		File main = new File(tmpDst, "src/MainActivity.java");
+		File newMain = new File(packageDir, "/MainActivity.java");
+		FileUtils.deleteQuietly(newMain);
+		FileUtils.moveFile(main, newMain);
+
+		File client = new File(tmpDst, "src/MKDroidClient.java");
+		File newClient = new File(packageDir, "/MKDroidClient.java");
+		FileUtils.deleteQuietly(newClient);
+		FileUtils.moveFile(client, newClient);
+
+		File webInterface = new File(tmpDst, "src/MKDroidJsInterface.java");
+		File newWebInterface = new File(packageDir, "/MKDroidJsInterface.java");
+		FileUtils.deleteQuietly(newWebInterface);
+		FileUtils.moveFile(webInterface, newWebInterface);
+
+		reviseFiles();
 
 		File dst = new File(tmpDst, cfg.projectName);
-		File main = new File(tmpDst, "src/MainActivity.java");
-		File newMain = new File("src/" + cfg.packageName.replace('.', '/')
-				+ "/MainActivity.java");
-		FileUtils.deleteQuietly(newMain);
-		FileUtils.copyFile(main, newMain);
-		reviseManifest();
 		FileUtils.copyDirectory(tmpDst, dst);
 
 	}
 
 	public void copy(boolean quietly) throws IOException {
-		if (!quietly){
+		if (!quietly) {
 			printDirContents(tmpDst);
 		}
 		File dst = new File(cfg.destinationPath);
 		File src = new File(tmpDst, cfg.projectName);
-		//src.renameTo(dst);
 		FileUtils.copyDirectoryToDirectory(src, dst);
 
 	}
@@ -156,11 +163,17 @@ public class MCProjectSetup {
 		layer_count--;
 	}
 
-	private void reviseManifest() throws IOException {
-		File manifest = new File(tmpDst, "AndroidManifest.xml");
-		if (manifest.exists()) {
-			templateManager.processOver(manifest);
-		}
+	private void reviseFiles() throws IOException {
+		File packageDir = new File(tmpDst, "src/"
+				+ cfg.packageName.replace('.', '/'));
+		templateManager.processOver(new File(tmpDst, "AndroidManifest.xml"));
+		templateManager.processOver(new File(packageDir, "MainActivity.java"));
+		templateManager.processOver(new File(packageDir,
+				"MKDroidClient.java"));
+		templateManager.processOver(new File(packageDir,
+				"MKDroidJsInterface.java"));
+		templateManager.processOver(new File(tmpDst, "/.project"));
+		templateManager.processOver(new File(tmpDst, "/.classpath"));
 
 	}
 

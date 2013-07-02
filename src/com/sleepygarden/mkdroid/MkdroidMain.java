@@ -66,11 +66,14 @@ public class MkdroidMain {
 		//	System.out.println("Invalid domain name.");
 		//	return;
 		//}
+		
+		
 
 		ProjectSetupConfiguration config = new ProjectSetupConfiguration();
 		config.projectName = "my-mkdroid-app";
 		config.destinationPath = dst.getAbsolutePath();
 		config.siteRoot = src.getAbsolutePath();
+		config.domain = domain;
 
 		MCProjectSetup setup = new MCProjectSetup(config);
 

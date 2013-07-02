@@ -28,5 +28,6 @@ public class ProjectSetupConfiguration {
 	public String projectName = "my-mkdroid";
 	public String destinationPath = ".";
 	public String siteRoot = "";
+	public String domain = "";
 
 }
