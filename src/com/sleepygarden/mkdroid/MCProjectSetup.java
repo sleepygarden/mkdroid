@@ -12,12 +12,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class MCProjectSetup {
-	private final ProjectSetupConfiguration cfg;
+	private final Configuration cfg;
 	private final File tmpDst = new File("__mkdroid_setup_tmp");
 	private final TemplateManager templateManager = new TemplateManager();
 	private int layer_count = -1;
 
-	public MCProjectSetup(ProjectSetupConfiguration cfg) {
+	public MCProjectSetup(Configuration cfg) {
 		this.cfg = cfg;
 
 		templateManager.define("PROJECT_NAME", cfg.projectName);
