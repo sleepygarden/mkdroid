@@ -1,10 +1,9 @@
-/**
- *
- * @author sleepygarden
- *
- */
 package com.sleepygarden.mkdroid.gui;
 
+/**
+ * Apache 2.0 dawg~
+ * @author michaelcornell | http://www.github.com/mcornell009
+ */
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Main  {
+public class Main {
 
 	static MkDroidGUI gui;
 	String path;
@@ -39,5 +38,5 @@ public class Main  {
 				}
 			}
 		});
-}
+	}
 }

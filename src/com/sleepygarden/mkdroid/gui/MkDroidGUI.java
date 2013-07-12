@@ -1,10 +1,9 @@
-/**
- *
- * @author sleepygarden
- *
- */
 package com.sleepygarden.mkdroid.gui;
 
+/**
+ * Apache 2.0 dawg~
+ * @author michaelcornell | http://www.github.com/mcornell009
+ */
 import java.awt.Color;
 import java.awt.Window;
 import java.awt.event.ActionEvent;

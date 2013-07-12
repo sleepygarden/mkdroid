@@ -1,5 +1,11 @@
 package com.sleepygarden.mkdroid;
 
+/**
+ * Apache 2.0 dawg~
+ * @author michaelcornell | http://www.github.com/mcornell009
+ * @author Aurelien Ribon | http://www.aurelienribon.com/
+ */
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,10 +41,10 @@ public class MCProjectSetup {
 		templateManager.define("ANDROID_TARGET_SDK",
 				cfg.androidTargetSdkVersion);
 		templateManager.define("ANDROID_USES_SDK");
-		
-		if (Integer.parseInt(cfg.androidTargetSdkVersion) >= 17){
+
+		if (Integer.parseInt(cfg.androidTargetSdkVersion) >= 17) {
 			templateManager.define("IF_V_17_UP", "");
-		}else {
+		} else {
 			templateManager.define("IF_V_17_UP", "//");
 		}
 	}
@@ -174,8 +180,7 @@ public class MCProjectSetup {
 				+ cfg.packageName.replace('.', '/'));
 		templateManager.processOver(new File(tmpDst, "/AndroidManifest.xml"));
 		templateManager.processOver(new File(packageDir, "MainActivity.java"));
-		templateManager.processOver(new File(packageDir,
-				"MKDroidClient.java"));
+		templateManager.processOver(new File(packageDir, "MKDroidClient.java"));
 		templateManager.processOver(new File(packageDir,
 				"MKDroidJsInterface.java"));
 		templateManager.processOver(new File(tmpDst, "/.project"));

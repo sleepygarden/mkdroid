@@ -1,5 +1,11 @@
 package com.sleepygarden.mkdroid;
 
+/**
+ * Apache 2.0 dawg~
+ * @author michaelcornell | http://www.github.com/mcornell009
+ * @author Aurelien Ribon | http://www.aurelienribon.com/
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
